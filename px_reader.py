@@ -17,9 +17,10 @@ Note: Python 2.7 support required
 import resource, logging, re, codecs
 from collections import OrderedDict as OD
 from collections import defaultdict
-from itertools import izip_longest, cycle, repeat
+from itertools import zip_longest, cycle, repeat
 from operator import mul
 import pandas as pd
+from functools import reduce
 
 def get_logger(level=logging.DEBUG, handler=logging.StreamHandler):
     """
@@ -71,9 +72,8 @@ class Px(object):
         Parses metadata keywords from px_doc and inserts those into self object
         Returns the data part
         """
-        meta, data = open(px_doc, 'U').read().split("DATA=")
-        meta = unicode(meta, 'iso-8859-1')
-        data = unicode(data, 'iso-8859-1')
+        # TODO: Support for other encodings
+        meta, data = open(px_doc, encoding='ISO-8859-1').read().split("DATA=")
         nmeta = {}
         for line in meta.strip().split(';\n'):
             if line:
@@ -103,7 +103,7 @@ class Px(object):
         if type(self.heading) != type(list()):
             self.heading = [self.heading]
 
-        for key, val in self.values.items():
+        for key, val in list(self.values.items()):
             if type(val) != type(list()):
                 self.values[key] = [val]
 
@@ -144,7 +144,7 @@ def grouper(n, iterable, fillvalue=None):
     """
     # grouper(3, 'ABCDEFG', 'x') --> ABC DEF Gxx
     args = [iter(iterable)] * n
-    return izip_longest(fillvalue=fillvalue, *args)
+    return zip_longest(fillvalue=fillvalue, *args)
 
 def index(px):
     """
@@ -185,16 +185,16 @@ def index(px):
         field_values = px.values.get(field)
         repeats = rep_index / len(field_values)
         rep_index = repeats
-        print field, repeats
+        print(field, repeats)
 
         col_index.append(list())
         index = 0
         values = cycle(field_values)
-        value = values.next()
+        value = next(values)
         for i, rep in enumerate(range(px.cols)):
             if index == repeats:
                 index = 0
-                value = values.next()
+                value = next(values)
             index += 1
             col_index[n].append(value)
     row_index = []
@@ -203,16 +203,16 @@ def index(px):
         field_values = px.values.get(field)
         repeats = rep_index / len(field_values)
         rep_index = repeats
-        print field, repeats
+        print(field, repeats)
 
         row_index.append(list())
         index = 0
         values = cycle(field_values)
-        value = values.next()
+        value = next(values)
         for i, rep in enumerate(range(px.rows)):
             if index == repeats:
                 index = 0
-                value = values.next()
+                value = next(values)
             index += 1
             row_index[n].append(value)
     return col_index, row_index
