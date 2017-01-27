@@ -1,6 +1,10 @@
 
 # PC Axis PX file format reader for Python
 
+# WIP
+
+Now requires Python 3, but has not been tested beyond PX file -> Pandas Dataframe conversion on Python 3.6 and Pandas 0.19.2. Python 2 is not supported at the moment (but works on commit 7669e5ccb5b8e0825d1044d5fe908b162904a523).
+
 ## Usage
 
 Requisite packages:
