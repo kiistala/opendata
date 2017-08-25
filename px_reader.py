@@ -185,7 +185,7 @@ def index(px):
         field_values = px.values.get(field)
         repeats = rep_index / len(field_values)
         rep_index = repeats
-        print(field, repeats)
+        # print(field, repeats)
 
         col_index.append(list())
         index = 0
@@ -203,7 +203,7 @@ def index(px):
         field_values = px.values.get(field)
         repeats = rep_index / len(field_values)
         rep_index = repeats
-        print(field, repeats)
+        # print(field, repeats)
 
         row_index.append(list())
         index = 0
